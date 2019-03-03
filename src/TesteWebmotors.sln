@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesteWebmotors.Domain", "Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesteWebmotors.Test", "TesteWebmotors.Test\TesteWebmotors.Test.csproj", "{5249501B-231B-49B8-BFD2-E6236AFC4075}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesteWebmotors.Infrastructure", "TesteWebmotors.R\TesteWebmotors.Infrastructure.csproj", "{05218736-0056-49D7-8DAD-1E04F5399F2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesteWebmotors.Infrastructure", "TesteWebmotors.Infrastructure\TesteWebmotors.Infrastructure.csproj", "{05218736-0056-49D7-8DAD-1E04F5399F2A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesteWebmotors.UI", "TesteWebmotors.UI\TesteWebmotors.UI.csproj", "{CD6AB7BA-9C00-43F7-ADD8-BB065730B902}"
 EndProject
