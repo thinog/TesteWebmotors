@@ -3,23 +3,24 @@
 <script>
     $(document).ready(function () {
         var marcas = JSON.parse('@Html.Raw(ViewBag.Marcas)');
-        var veiculos = JSON.parse('@Html.Raw(ViewBag.Veiculos)');
 
-        var modelos, versoes, veiculoSelecionado, marcaSelecionada, modeloselecionado, versaoSelecionada;
+        var modelos, versoes;
 
 
         $('#Marca').find('option').remove();
+        $('#Marca').append($('<option>').html('Escolha...'));
         $.each(marcas, function (indice, marca) {
             $('#Marca').append($('<option>').val(marca.Id).html(marca.Name));
         });
+
+        $('#Marca').attr('selectedIndex', -1);
 
 
         $('#Marca').on('change', function () {
             $.each(marcas, function (indice, marca) {
                 if (marca.Id == $('#Marca').val()) {
-                    marcaSelecionada = marca.Name;
-                    updateCards();
                     $('#Modelo').find('option').remove();
+                    $('#Modelo').append($('<option>').html('Escolha...'));
                     modelos = marca.CarModels;
                     $.each(modelos, function (indice, modelo) {
                         $('#Modelo').append($('<option>').val(modelo.Id).html(modelo.Name));
@@ -28,15 +29,16 @@
                     return;
                 }
             });
+
+                $('#Modelo').attr('selectedIndex', -1);
         });
 
 
         $('#Modelo').on('change', function () {
             $.each(modelos, function (indice, modelo) {
                 if (modelo.Id == $('#Modelo').val()) {
-                    marcaSelecionada = modelo.Name;
-                    updateCards();
                     $('#Versao').find('option').remove();
+                    $('#Versao').append($('<option>').html('Escolha...'));
                     versoes = modelo.CarVersions;
                     $.each(versoes, function (indice, versao) {
                         $('#Versao').append($('<option>').val(versao.Id).html(versao.Name));
@@ -45,117 +47,9 @@
                     return;
                 }
             });
+
+                $('#Versao').attr('selectedIndex', -1);
         });
-
-
-        $('#Versao').on('change', function () {
-            $.each(versoes, function (indice, versao) {
-                if (versao.Id == $('#Versao').val()) {
-                    versaoSelecionada = versao.Name;
-                    updateCards();
-
-                    return;
-                }
-            });
-        });
-
-
-        $('.botao-veiculo').on('click', function () {
-            var jaSelecionado = false;
-
-            if (!$(this).hasClass('selecionado')) {
-                $('.botao-veiculo').each(function (indice, botao) {
-                    if (botao.hasClass('selecionado')) {
-                        jaSelecionado = true;
-                        alert('Você só pode selecionar um veículo!');
-                        return;
-                    }
-                });
-
-                if (!jaSelecionado) {
-                    var id = $(this).attr('id');
-                    $(this).removeClass('btn-primary');
-                    $(this).addClass('btn-success');
-                    $.each(veiculos, function (indice, veiculo) {
-                        if (veiculo.Id = id) {
-                            veiculoSelecionado = veiculo;
-                            $('#Veiculo').val(JSON.stringify(veiculo));
-                            return;
-                        }
-                    });
-                }
-            } else {
-                $(this).removeClass('selecionado');
-                $(this).removeClass('btn-success');
-                $(this).addClass('btn-primary');
-                veiculoSelecionado = null;
-                $('#Veiculo').val('');
-            }
-        });
-
-
-        function updateCards() {
-            $('#Veiculos').html('');
-
-            $.each(veiculos, function (indice, veiculo) {
-                var ok = true;
-
-                if (marcaSelecionada == undefined || marcaSelecionada == null) {
-                    ok = true;
-                }
-                else if (marcaSelecionada == veiculo.Make) {
-                    if (modeloselecionado == undefined || modeloselecionado == null) {
-                        ok = true;
-                    }
-                    else if (modeloselecionado == veiculo.Model) {
-                        if (versaoSelecionada == undefined || versaoSelecionada == null) {
-                            ok = true;
-                        }
-                        else if (versaoSelecionada == veiculo.Version) {
-                            ok = true;
-                        }
-                        else {
-                            ok = false;
-                        }
-                    }
-                    else {
-                        ok = false;
-                    }
-                }
-                else {
-                    ok = false
-                }
-
-
-                if (ok) {
-                    var cardId = 'veiculo' + veiculo.Id;
-
-                    var $divCard = $('<div>', { 'id': cardId, 'class': 'card mb-3 mt-3 mr-4 l-4' });
-                    $divCard.append($('<img>', { 'class': 'card-img-top', 'src': veiculo.Image, 'alt': 'Veiculo' }));
-
-                    var $divBody = $('<div>', { 'class': 'card-body' });
-                    $divBody.append($('<h5>', { 'class': 'card-title' }).html(veiculo.Make + ' - ' + veiculo.Model));
-                    $divBody.append($('<p>', { 'class': 'card-text' }).html(veiculo.Version));
-                    $divBody.append($('<p>', { 'class': 'card-text' }).html('Quilometragem ' + veiculo.KM + ' KM'));
-                    $divBody.append($('<p>', { 'class': 'card-text' }).html('R$ ' + veiculo.Price));
-                    $divBody.append($('<p>', { 'class': 'card-text' }).html(veiculo.YearFab + '/' + veiculo.YearModel));
-                    $divBody.append($('<p>', { 'class': 'card-text' }).html('Cor ' + veiculo.Color));
-
-                    $divCard.append($divBody);
-
-                    var $divFooter = $('<div>', { 'class': 'card-footer' });
-                    var $button = $('button', { 'id': 'botao' + veiculo.Id, 'class': 'btn btn-primary botao-veiculo' });
-                    $button.attr('type', 'button').html('Selecionar')
-                    $divFooter.append($button);
-
-                    $divCard.append($divFooter);
-
-                    $('#Veiculos').append($divCard);
-                }
-            });
-        }
-
-        updateCards();
     });
 </script>
 
@@ -164,61 +58,74 @@
 {
     @Html.AntiForgeryToken()
 
-<div>
-    <h4>Anúncio - Filtre,selecione o carro desejado e clique em "Criar anúncio"</h4>
-    <hr />
+    <div class="col-12">
+        <h4>Anúncio</h4>
+        <hr />
 
-    <div class="form-row">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Marca, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Marca, htmlAttributes: new { @class = "control-label" })
             <div class="col-md-10">
                 <select name="Marca" id="Marca" class="custom-select">
                     <option></option>
                 </select>
+
+                @Html.ValidationMessageFor(model => model.Marca, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Modelo, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Modelo, htmlAttributes: new { @class = "control-label" })
             <div class="col-md-10">
                 <select name="Modelo" id="Modelo" class="custom-select">
                     <option></option>
                 </select>
+
+                @Html.ValidationMessageFor(model => model.Modelo, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Versao, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Versao, htmlAttributes: new { @class = "control-label" })
             <div class="col-md-10">
                 <select name="Versao" id="Versao" class="custom-select">
                     <option></option>
                 </select>
+
+                @Html.ValidationMessageFor(model => model.Versao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ano, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ano, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Ano, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Quilometragem, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Quilometragem, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Quilometragem, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Observacao, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Observacao, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Observacao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Criar anúncio" class="btn btn-dark" />
             </div>
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Observacao, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Observacao, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-    </div>
-
-    <input type="hidden" id="Veiculo" name="Veiculo" />
-
-
-    <div class="row" id="Veiculos">
-
-    </div>
-
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Criar anúncio" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
 
 <div>

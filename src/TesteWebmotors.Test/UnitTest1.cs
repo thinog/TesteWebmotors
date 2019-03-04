@@ -22,17 +22,6 @@ namespace TesteWebmotors.Test
             Assert.IsNotNull(marcas);
         }
 
-        [TestMethod]
-        public void ConsultaVeiculos()
-        {
-            Container container = IoC.Registrar();
-            IConsultaAPIService service = container.GetInstance<IConsultaAPIService>();
-
-            IEnumerable<Veiculo> veiculos = service.ConsultarVeiculos();
-
-            Assert.IsNotNull(veiculos);
-        }
-
 
 
         [TestMethod]

@@ -35,58 +35,98 @@ namespace TesteWebmotors.UI.Controllers
         public ActionResult Create()
         {
             IEnumerable<Marca> marcas = _apiService.ConsultarMarcas();
-            IEnumerable<Veiculo> veiculos = _apiService.ConsultarVeiculos();
             ViewBag.Marcas = JsonConvert.SerializeObject(marcas);
-            ViewBag.Veiculos = JsonConvert.SerializeObject(veiculos);
             return View();
         }
-
-        // POST: Anuncio/Create
+        
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
-            try
-            {                
+            IEnumerable<Marca> marcas = _apiService.ConsultarMarcas();
 
-                return RedirectToAction("Index");
-            }
-            catch
+            try
             {
+                Anuncio model = new Anuncio();
+
+                UpdateModel<Anuncio>(model, collection);
+
+                Marca marca = marcas.FirstOrDefault(m => m.Id == Int32.Parse(model.Marca));
+                Modelo modelo = marca.CarModels.FirstOrDefault(m => m.Id == Int32.Parse(model.Modelo));
+                Versao versao = modelo.CarVersions.FirstOrDefault(m => m.Id == Int32.Parse(model.Versao));
+
+                model.Marca = marca.Name;
+                model.Modelo = modelo.Name;
+                model.Versao = versao.Name;
+
+                if (ModelState.IsValid)
+                {
+                    _anuncioService.Inserir(model);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.Marcas = JsonConvert.SerializeObject(marcas);
+                    return View(model);
+                }
+            }
+            catch(Exception ex)
+            {
+                ViewBag.Marcas = JsonConvert.SerializeObject(marcas);
                 return View();
             }
         }
-
-        // GET: Anuncio/Edit/5
+        
         public ActionResult Edit(int id)
         {
+            IEnumerable<Marca> marcas = _apiService.ConsultarMarcas();
+            ViewBag.Marcas = JsonConvert.SerializeObject(marcas);
             Anuncio anuncio = _anuncioService.RetornarPorId(id);
             return View(anuncio);
         }
-
-        // POST: Anuncio/Edit/5
+        
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
+            IEnumerable<Marca> marcas = _apiService.ConsultarMarcas();
+
             try
             {
-                // TODO: Add update logic here
+                Anuncio model = new Anuncio();
 
-                return RedirectToAction("Index");
+                UpdateModel<Anuncio>(model, collection);
+
+                Marca marca = marcas.FirstOrDefault(m => m.Id == Int32.Parse(model.Marca));
+                Modelo modelo = marca.CarModels.FirstOrDefault(m => m.Id == Int32.Parse(model.Modelo));
+                Versao versao = modelo.CarVersions.FirstOrDefault(m => m.Id == Int32.Parse(model.Versao));
+
+                model.Marca = marca.Name;
+                model.Modelo = modelo.Name;
+                model.Versao = versao.Name;
+
+                if (ModelState.IsValid)
+                {
+                    _anuncioService.Atualizar(model);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.Marcas = JsonConvert.SerializeObject(marcas);
+                    return View(model);
+                }
             }
-            catch
+            catch (Exception ex)
             {
+                ViewBag.Marcas = JsonConvert.SerializeObject(marcas);
                 return View();
             }
         }
-
-        // GET: Anuncio/Delete/5
+        
         public ActionResult Delete(int id)
         {
             Anuncio anuncio = _anuncioService.RetornarPorId(id);
             return View(anuncio);
         }
-
-        // POST: Anuncio/Delete/5
+        
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
@@ -97,7 +137,7 @@ namespace TesteWebmotors.UI.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
                 return View();
             }

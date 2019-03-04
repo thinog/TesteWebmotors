@@ -13,7 +13,6 @@ namespace TesteWebmotors.Domain.Services
         private const string API_MARCA = "http://desafioonline.webmotors.com.br/api/OnlineChallenge/Make";
         private const string API_MODELO = "http://desafioonline.webmotors.com.br/api/OnlineChallenge/Model";
         private const string API_VERSAO = "http://desafioonline.webmotors.com.br/api/OnlineChallenge/Version";
-        private const string API_VEICULO = "http://desafioonline.webmotors.com.br/api/OnlineChallenge/Vehicles";
 
 
         public IEnumerable<Marca> ConsultarMarcas()
@@ -39,32 +38,6 @@ namespace TesteWebmotors.Domain.Services
             }
 
             return marcas;
-        }
-
-        public IEnumerable<Veiculo> ConsultarVeiculos()
-        {
-            List<Veiculo> veiculos = new List<Veiculo>();
-            bool fimVeiculos = false;
-            int pagina = 1;
-            Dictionary<string, string> parametros = new Dictionary<string, string>();            
-
-            while (!fimVeiculos)
-            {
-                parametros.Clear();
-                parametros.Add("Page", pagina.ToString());
-
-                var v = ConsultarAPI<Veiculo>(API_VEICULO, parametros);
-
-                if (v?.Count() > 0)
-                {
-                    veiculos.AddRange(v);
-                    pagina++;
-                }
-                else
-                    fimVeiculos = true;
-            }
-
-            return veiculos;
         }
 
 
