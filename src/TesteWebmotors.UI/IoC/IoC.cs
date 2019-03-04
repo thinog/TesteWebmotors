@@ -10,6 +10,9 @@ namespace TesteWebmotors.UI.IoC
 {
     public static class IoC
     {
+        public static Container Container { get; set; }
+
+
         public static Container Registrar()
         {
             Container container = new Container();
@@ -20,6 +23,8 @@ namespace TesteWebmotors.UI.IoC
             container.Register<IConsultaAPIService, ConsultaAPIService>();
 
             container.Verify();
+
+            Container = container;
 
             return container;
         }

@@ -8,7 +8,7 @@ namespace TesteWebmotors.UI
     {
         public void Configuration(IAppBuilder app)
         {
-
+            IoC.IoC.Registrar();
         }
     }
 }

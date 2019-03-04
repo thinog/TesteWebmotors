@@ -71,7 +71,7 @@
       <Project>{a53b7de8-1102-4068-9c32-e95dfb1f8fb3}</Project>
       <Name>TesteWebmotors.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TesteWebmotors.R\TesteWebmotors.Infrastructure.csproj">
+    <ProjectReference Include="..\TesteWebmotors.Infrastructure\TesteWebmotors.Infrastructure.csproj">
       <Project>{05218736-0056-49d7-8dad-1e04f5399f2a}</Project>
       <Name>TesteWebmotors.Infrastructure</Name>
     </ProjectReference>
@@ -81,7 +81,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>

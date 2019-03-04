@@ -13,7 +13,6 @@ namespace TesteWebmotors.Domain.Services
         private const string API_MARCA = "http://desafioonline.webmotors.com.br/api/OnlineChallenge/Make";
         private const string API_MODELO = "http://desafioonline.webmotors.com.br/api/OnlineChallenge/Model";
         private const string API_VERSAO = "http://desafioonline.webmotors.com.br/api/OnlineChallenge/Version";
-        private const string API_VEICULO = "http://desafioonline.webmotors.com.br/api/OnlineChallenge/Vehicles";
 
 
         public IEnumerable<Marca> ConsultarMarcas()
